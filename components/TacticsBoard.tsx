@@ -19,13 +19,13 @@ const TacticsBoard: React.FC<Props> = ({ tactics, onUpdate, disabled }) => {
 
   const SelectGroup = ({ label, value, options, onChange }: any) => (
     <div className="mb-4">
-      <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{label}</label>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+      <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">{label}</label>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {Object.values(options).map((opt: any) => (
           <button
             key={opt}
             onClick={() => !disabled && onChange(opt)}
-            className={`px-3 py-2 text-xs sm:text-sm rounded border transition-all ${
+            className={`px-2 py-3 md:px-3 md:py-2 text-[10px] md:text-sm rounded border transition-all truncate ${
               value === opt
                 ? 'bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-900/50'
                 : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700'
@@ -40,8 +40,8 @@ const TacticsBoard: React.FC<Props> = ({ tactics, onUpdate, disabled }) => {
   );
 
   return (
-    <div className="bg-slate-900 p-6 rounded-lg border border-slate-800 shadow-xl max-h-[80vh] overflow-y-auto">
-      <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+    <div className="bg-slate-900 p-4 md:p-6 rounded-lg border border-slate-800 shadow-xl overflow-y-auto mb-20 md:mb-0">
+      <h2 className="text-xl md:text-2xl font-bold text-white mb-6 flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
         Prancheta Tática
       </h2>
@@ -80,7 +80,7 @@ const TacticsBoard: React.FC<Props> = ({ tactics, onUpdate, disabled }) => {
                 disabled={disabled}
                 value={tactics.conditionals.winning}
                 onChange={(e) => updateConditional('winning', e.target.value)}
-                className="w-full bg-slate-900 text-white p-2 rounded border border-slate-600 text-sm"
+                className="w-full bg-slate-900 text-white p-3 md:p-2 rounded border border-slate-600 text-sm"
               >
                 <option value="maintain">Manter Tática</option>
                 <option value="recuar">Recuar Linhas (Retranca)</option>
@@ -96,7 +96,7 @@ const TacticsBoard: React.FC<Props> = ({ tactics, onUpdate, disabled }) => {
                 disabled={disabled}
                 value={tactics.conditionals.losing}
                 onChange={(e) => updateConditional('losing', e.target.value)}
-                className="w-full bg-slate-900 text-white p-2 rounded border border-slate-600 text-sm"
+                className="w-full bg-slate-900 text-white p-3 md:p-2 rounded border border-slate-600 text-sm"
               >
                 <option value="maintain">Manter Tática</option>
                 <option value="pressure_total">Pressão Total</option>
@@ -112,7 +112,7 @@ const TacticsBoard: React.FC<Props> = ({ tactics, onUpdate, disabled }) => {
                 disabled={disabled}
                 value={tactics.conditionals.draw70}
                 onChange={(e) => updateConditional('draw70', e.target.value)}
-                className="w-full bg-slate-900 text-white p-2 rounded border border-slate-600 text-sm"
+                className="w-full bg-slate-900 text-white p-3 md:p-2 rounded border border-slate-600 text-sm"
               >
                 <option value="maintain">Manter (Aceitar Empate)</option>
                 <option value="risk_all">Arriscar Tudo (Ataque)</option>

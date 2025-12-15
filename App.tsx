@@ -134,8 +134,8 @@ export default function App() {
   if (appState === AppState.SETUP) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 bg-[url('https://images.unsplash.com/photo-1518091043644-c1d4457512c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center bg-blend-multiply">
-        <div className="bg-slate-900/90 p-8 rounded-xl border border-slate-700 shadow-2xl max-w-md w-full backdrop-blur">
-          <h1 className="text-4xl font-black text-white mb-2 tracking-tighter">TACTICO <span className="text-emerald-500">MANAGER</span></h1>
+        <div className="bg-slate-900/90 p-6 md:p-8 rounded-xl border border-slate-700 shadow-2xl max-w-md w-full backdrop-blur">
+          <h1 className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tighter">TACTICO <span className="text-emerald-500">MANAGER</span></h1>
           <p className="text-slate-400 mb-6">Simulador tático de futebol.</p>
           <form onSubmit={startSeason} className="space-y-4">
             <div>
@@ -162,41 +162,37 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row max-w-[1600px] mx-auto">
-      {/* Sidebar Navigation */}
-      <nav className="bg-slate-900 w-full md:w-20 md:min-h-screen border-r border-slate-800 flex flex-row md:flex-col items-center py-4 px-2 gap-6 justify-center md:justify-start z-10 sticky top-0 md:static">
-         <div className="hidden md:block text-emerald-500 font-black text-2xl mb-8">TM</div>
-         <NavBtn icon="dashboard" label="Home" active={appState === AppState.DASHBOARD} onClick={() => setAppState(AppState.DASHBOARD)} />
-         <NavBtn icon="tactics" label="Táticas" active={appState === AppState.TACTICS} onClick={() => setAppState(AppState.TACTICS)} />
-         <NavBtn icon="search" label="Scout" active={appState === AppState.SCOUTING} onClick={() => setAppState(AppState.SCOUTING)} />
-      </nav>
+    <div className="h-full flex flex-col md:flex-row max-w-[1600px] mx-auto overflow-hidden">
+      
+      {/* Mobile Top Header (Just Brand) */}
+      <div className="md:hidden bg-slate-900 border-b border-slate-800 p-3 flex justify-between items-center shrink-0">
+          <span className="text-emerald-500 font-black text-xl">TM</span>
+          <span className="text-white font-bold text-sm truncate max-w-[150px]">{userTeam?.name}</span>
+      </div>
 
-      {/* Main Content */}
-      <main className="flex-1 p-4 md:p-8 overflow-y-auto">
+      {/* Main Content Area */}
+      <main className="flex-1 p-3 md:p-8 overflow-y-auto pb-20 md:pb-8">
         
-        {/* Header */}
-        <header className="flex flex-col md:flex-row justify-between items-center mb-8 pb-4 border-b border-slate-800 gap-4">
+        {/* Desktop Header */}
+        <header className="hidden md:flex flex-col md:flex-row justify-between items-center mb-8 pb-4 border-b border-slate-800 gap-4">
            <div className="w-full md:w-auto">
               <h1 className="text-2xl font-bold text-white">{userTeam?.name}</h1>
               <span className="text-slate-400 text-sm">Rodada {currentRound + 1} de {schedule.length}</span>
            </div>
            
            <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto justify-end">
-               {/* Next Opponent Mini-Card */}
                {nextOpponent && appState !== AppState.MATCH_RESULT && currentRound < schedule.length && (
                  <div className="flex items-center gap-3 px-4 py-2 bg-slate-800/50 rounded-lg border border-slate-700/50">
                     <div className="flex flex-col items-end">
                         <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Próximo Rival</span>
                         <span className="font-bold text-white text-sm">{nextOpponent.name}</span>
                     </div>
-                    {/* Placeholder Symbol */}
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600 flex items-center justify-center shadow-inner">
                         <span className="text-lg font-black text-slate-400">{nextOpponent.name.charAt(0)}</span>
                     </div>
                  </div>
                )}
 
-               {/* Action Button */}
                {appState !== AppState.MATCH_RESULT && currentRound < schedule.length ? (
                  <button 
                     onClick={playRound}
@@ -211,29 +207,46 @@ export default function App() {
            </div>
         </header>
 
+        {/* Mobile Context Header (Opponent Info + Action) */}
+        {appState !== AppState.MATCH_RESULT && currentRound < schedule.length && (
+            <div className="md:hidden mb-4 bg-slate-800/30 p-3 rounded-lg border border-slate-700/50 flex flex-col gap-3">
+               <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-400">Rodada {currentRound + 1} / {schedule.length}</span>
+                    {nextOpponent && <span className="text-xs font-bold text-emerald-400">vs {nextOpponent.name}</span>}
+               </div>
+               <button 
+                    onClick={playRound}
+                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-lg font-bold shadow-lg flex items-center justify-center gap-2"
+                 >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>
+                    JOGAR AGORA
+                 </button>
+            </div>
+        )}
+
         {appState === AppState.DASHBOARD && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
              <div className="lg:col-span-2 space-y-6">
                 {/* Next Match Card */}
                 {nextOpponent ? (
-                  <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-xl border border-slate-700 relative overflow-hidden">
+                  <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-4 md:p-6 rounded-xl border border-slate-700 relative overflow-hidden">
                      <div className="absolute top-0 right-0 p-4 opacity-10">
-                        <svg className="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" /></svg>
+                        <svg className="w-24 h-24 md:w-32 md:h-32 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" /></svg>
                      </div>
                      <h3 className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4">Análise Pré-Jogo</h3>
-                     <div className="flex items-center justify-between">
+                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                           <div className="text-3xl font-black text-white mb-1">{nextOpponent.name}</div>
-                           <div className="text-emerald-400 font-medium">Estilo: {nextOpponent.tactics.structure} / {nextOpponent.tactics.buildUp}</div>
+                           <div className="text-2xl md:text-3xl font-black text-white mb-1 truncate">{nextOpponent.name}</div>
+                           <div className="text-emerald-400 text-sm md:text-base font-medium">Estilo: {nextOpponent.tactics.structure} / {nextOpponent.tactics.buildUp}</div>
                         </div>
-                        <div className="text-right">
-                           <div className="text-slate-500 text-sm">Posição</div>
-                           <div className="text-2xl font-bold text-white">#{teams.sort((a,b) => b.stats.pts - a.stats.pts).findIndex(t => t.id === nextOpponent.id) + 1}</div>
+                        <div className="text-left sm:text-right">
+                           <div className="text-slate-500 text-xs md:text-sm">Posição na Tabela</div>
+                           <div className="text-xl md:text-2xl font-bold text-white">#{teams.sort((a,b) => b.stats.pts - a.stats.pts).findIndex(t => t.id === nextOpponent.id) + 1}</div>
                         </div>
                      </div>
-                     <div className="mt-6 flex gap-2">
-                        <button onClick={() => setAppState(AppState.TACTICS)} className="text-sm bg-slate-700 hover:bg-slate-600 text-white py-2 px-4 rounded border border-slate-600">Ajustar Tática</button>
-                        <button onClick={() => setAppState(AppState.SCOUTING)} className="text-sm border border-slate-600 text-slate-300 hover:bg-slate-800 py-2 px-4 rounded">Ver Histórico Deles</button>
+                     <div className="mt-6 flex flex-wrap gap-2">
+                        <button onClick={() => setAppState(AppState.TACTICS)} className="flex-1 sm:flex-none text-sm bg-slate-700 hover:bg-slate-600 text-white py-2 px-4 rounded border border-slate-600">Ajustar Tática</button>
+                        <button onClick={() => setAppState(AppState.SCOUTING)} className="flex-1 sm:flex-none text-sm border border-slate-600 text-slate-300 hover:bg-slate-800 py-2 px-4 rounded">Ver Histórico</button>
                      </div>
                   </div>
                 ) : (
@@ -256,9 +269,9 @@ export default function App() {
                           const isMyGame = h?.isPlayer || a?.isPlayer;
                           return (
                             <div key={m.id} className={`flex justify-between text-sm p-2 rounded ${isMyGame ? 'bg-emerald-900/20 border border-emerald-900/50' : 'bg-slate-800/50'}`}>
-                              <span className={m.homeScore > m.awayScore ? 'font-bold text-white' : 'text-slate-400'}>{h?.name}</span>
-                              <span className="text-slate-300 px-2 font-mono bg-slate-950 rounded">{m.homeScore} - {m.awayScore}</span>
-                              <span className={m.awayScore > m.homeScore ? 'font-bold text-white' : 'text-slate-400'}>{a?.name}</span>
+                              <span className={`truncate w-1/3 text-left ${m.homeScore > m.awayScore ? 'font-bold text-white' : 'text-slate-400'}`}>{h?.name}</span>
+                              <span className="text-slate-300 px-2 font-mono bg-slate-950 rounded text-center whitespace-nowrap">{m.homeScore} - {m.awayScore}</span>
+                              <span className={`truncate w-1/3 text-right ${m.awayScore > m.homeScore ? 'font-bold text-white' : 'text-slate-400'}`}>{a?.name}</span>
                             </div>
                           )
                         }) 
@@ -276,43 +289,43 @@ export default function App() {
         )}
 
         {appState === AppState.SCOUTING && (
-          <div className="bg-slate-900 rounded-lg border border-slate-800 p-6">
+          <div className="bg-slate-900 rounded-lg border border-slate-800 p-4 md:p-6 mb-20 md:mb-0">
              {/* NEXT OPPONENT DEEP DIVE */}
              {nextOpponent ? (
-                 <div className="mb-8 p-6 bg-gradient-to-r from-slate-800 to-slate-900 rounded-xl border border-emerald-500/30 shadow-lg">
-                    <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                        <span className="text-emerald-500">PRÓXIMO ADVERSÁRIO:</span> 
-                        {nextOpponent.name}
+                 <div className="mb-8 p-4 md:p-6 bg-gradient-to-r from-slate-800 to-slate-900 rounded-xl border border-emerald-500/30 shadow-lg">
+                    <h2 className="text-lg md:text-xl font-bold text-white mb-4 flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
+                        <span className="text-emerald-500 text-xs md:text-base uppercase tracking-wider">Próximo Adversário:</span> 
+                        <span className="truncate">{nextOpponent.name}</span>
                     </h2>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                         {/* Tactical Profile */}
                         <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
                             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-3">Perfil Tático</h3>
-                            <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div className="grid grid-cols-2 gap-3 md:gap-4 text-sm">
                                 <div>
-                                    <p className="text-slate-500 text-xs">Estrutura Defensiva</p>
-                                    <p className="text-white font-medium">{nextOpponent.tactics.structure}</p>
+                                    <p className="text-slate-500 text-[10px] md:text-xs">Estrutura Defensiva</p>
+                                    <p className="text-white font-medium text-xs md:text-sm">{nextOpponent.tactics.structure}</p>
                                 </div>
                                 <div>
-                                    <p className="text-slate-500 text-xs">Linha Defensiva</p>
-                                    <p className="text-white font-medium">{nextOpponent.tactics.line}</p>
+                                    <p className="text-slate-500 text-[10px] md:text-xs">Linha Defensiva</p>
+                                    <p className="text-white font-medium text-xs md:text-sm">{nextOpponent.tactics.line}</p>
                                 </div>
                                 <div>
-                                    <p className="text-slate-500 text-xs">Construção</p>
-                                    <p className="text-white font-medium">{nextOpponent.tactics.buildUp}</p>
+                                    <p className="text-slate-500 text-[10px] md:text-xs">Construção</p>
+                                    <p className="text-white font-medium text-xs md:text-sm">{nextOpponent.tactics.buildUp}</p>
                                 </div>
                                 <div>
-                                    <p className="text-slate-500 text-xs">Ritmo</p>
-                                    <p className="text-white font-medium">{nextOpponent.tactics.tempo}</p>
+                                    <p className="text-slate-500 text-[10px] md:text-xs">Ritmo</p>
+                                    <p className="text-white font-medium text-xs md:text-sm">{nextOpponent.tactics.tempo}</p>
                                 </div>
                                 <div>
-                                    <p className="text-slate-500 text-xs">Pressão</p>
-                                    <p className="text-white font-medium">{nextOpponent.tactics.pressing}</p>
+                                    <p className="text-slate-500 text-[10px] md:text-xs">Pressão</p>
+                                    <p className="text-white font-medium text-xs md:text-sm">{nextOpponent.tactics.pressing}</p>
                                 </div>
                                 <div>
-                                    <p className="text-slate-500 text-xs">Criação</p>
-                                    <p className="text-white font-medium">{nextOpponent.tactics.creation}</p>
+                                    <p className="text-slate-500 text-[10px] md:text-xs">Criação</p>
+                                    <p className="text-white font-medium text-xs md:text-sm">{nextOpponent.tactics.creation}</p>
                                 </div>
                             </div>
                         </div>
@@ -335,7 +348,7 @@ export default function App() {
                 {teams.filter(t => !t.isPlayer && t.id !== nextOpponent?.id).map(t => (
                   <div key={t.id} className="bg-slate-800 p-4 rounded border border-slate-700">
                      <div className="flex justify-between mb-2">
-                        <span className="font-bold text-white">{t.name}</span>
+                        <span className="font-bold text-white truncate max-w-[70%]">{t.name}</span>
                         <span className="text-xs text-slate-500">#{teams.findIndex(x => x.id === t.id) + 1}</span>
                      </div>
                      <div className="text-xs text-slate-400 grid grid-cols-2 gap-y-1 mb-3">
@@ -363,6 +376,21 @@ export default function App() {
         )}
 
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="md:hidden fixed bottom-0 w-full bg-slate-900 border-t border-slate-800 flex justify-around items-center py-2 px-4 z-50 safe-area-bottom">
+         <NavBtn icon="dashboard" label="Home" active={appState === AppState.DASHBOARD} onClick={() => setAppState(AppState.DASHBOARD)} />
+         <NavBtn icon="tactics" label="Táticas" active={appState === AppState.TACTICS} onClick={() => setAppState(AppState.TACTICS)} />
+         <NavBtn icon="search" label="Scout" active={appState === AppState.SCOUTING} onClick={() => setAppState(AppState.SCOUTING)} />
+      </nav>
+
+      {/* Desktop Sidebar Navigation */}
+      <nav className="hidden md:flex bg-slate-900 w-20 min-h-screen border-r border-slate-800 flex-col items-center py-4 px-2 gap-6 justify-start shrink-0">
+         <div className="text-emerald-500 font-black text-2xl mb-8">TM</div>
+         <NavBtn icon="dashboard" label="Home" active={appState === AppState.DASHBOARD} onClick={() => setAppState(AppState.DASHBOARD)} />
+         <NavBtn icon="tactics" label="Táticas" active={appState === AppState.TACTICS} onClick={() => setAppState(AppState.TACTICS)} />
+         <NavBtn icon="search" label="Scout" active={appState === AppState.SCOUTING} onClick={() => setAppState(AppState.SCOUTING)} />
+      </nav>
     </div>
   );
 }
@@ -379,13 +407,13 @@ const NavBtn = ({ icon, label, active, onClick }: any) => {
   return (
     <button 
       onClick={onClick} 
-      className={`p-3 rounded-xl transition-all flex flex-col items-center justify-center gap-1 group ${active ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}
+      className={`p-3 rounded-xl transition-all flex flex-col items-center justify-center gap-1 group w-full md:w-auto ${active ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}
       title={label}
     >
       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         {getIcon()}
       </svg>
-      <span className="text-[10px] font-bold md:hidden lg:hidden">{label}</span>
+      <span className="text-[10px] font-bold block md:hidden lg:hidden">{label}</span>
     </button>
   );
 };
