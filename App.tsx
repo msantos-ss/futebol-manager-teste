@@ -165,13 +165,13 @@ export default function App() {
     <div className="h-full flex flex-col md:flex-row max-w-[1600px] mx-auto overflow-hidden">
       
       {/* Mobile Top Header (Just Brand) */}
-      <div className="md:hidden bg-slate-900 border-b border-slate-800 p-3 flex justify-between items-center shrink-0">
+      <div className="md:hidden bg-slate-900 border-b border-slate-800 p-3 flex justify-between items-center shrink-0 z-10">
           <span className="text-emerald-500 font-black text-xl">TM</span>
           <span className="text-white font-bold text-sm truncate max-w-[150px]">{userTeam?.name}</span>
       </div>
 
-      {/* Main Content Area */}
-      <main className="flex-1 p-3 md:p-8 overflow-y-auto pb-20 md:pb-8">
+      {/* Main Content Area - SCROLLABLE */}
+      <main className="flex-1 p-3 md:p-8 overflow-y-auto pb-24 md:pb-8">
         
         {/* Desktop Header */}
         <header className="hidden md:flex flex-col md:flex-row justify-between items-center mb-8 pb-4 border-b border-slate-800 gap-4">
@@ -216,7 +216,7 @@ export default function App() {
                </div>
                <button 
                     onClick={playRound}
-                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-lg font-bold shadow-lg flex items-center justify-center gap-2"
+                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-lg font-bold shadow-lg flex items-center justify-center gap-2 active:bg-emerald-700"
                  >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>
                     JOGAR AGORA
@@ -378,7 +378,7 @@ export default function App() {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 w-full bg-slate-900 border-t border-slate-800 flex justify-around items-center py-2 px-4 z-50 safe-area-bottom">
+      <nav className="md:hidden fixed bottom-0 w-full bg-slate-900 border-t border-slate-800 flex justify-around items-center py-2 px-4 z-50 shadow-2xl safe-area-bottom">
          <NavBtn icon="dashboard" label="Home" active={appState === AppState.DASHBOARD} onClick={() => setAppState(AppState.DASHBOARD)} />
          <NavBtn icon="tactics" label="Táticas" active={appState === AppState.TACTICS} onClick={() => setAppState(AppState.TACTICS)} />
          <NavBtn icon="search" label="Scout" active={appState === AppState.SCOUTING} onClick={() => setAppState(AppState.SCOUTING)} />
